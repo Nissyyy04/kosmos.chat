@@ -105,6 +105,8 @@ function createMessageElement(message) {
     const div = document.createElement('div');
     div.className = `message ${message.role}`;
 
+    if (message.role.lower().trim() === "assistant") return;
+
     // Create header container
     const header = document.createElement('div');
     header.className = 'message-header';
