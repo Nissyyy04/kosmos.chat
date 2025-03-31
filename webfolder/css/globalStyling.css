@@ -1,0 +1,493 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    line-height: 0.8rem !important;
+    transition: all 0.25s;
+    scroll-behavior: smooth;
+}
+:focus {
+    outline: 2px solid rgb(100, 100, 100);
+    outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+body, html {
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    background-color: rgb(30, 30, 30);
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: rgb(50, 50, 50);
+    padding: 0;
+    width: 100%;
+    height: 60px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#headerTitle {
+    transition: opacity 0.3s ease;
+    max-width: 60vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#headerTitle.updating {
+    opacity: 0.7;
+}
+
+.menu-button {
+    background: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    width: auto;
+    height: auto;
+}
+
+
+.stop-button{
+    height: 25px;
+    width: 25px;
+    font-size: 10px;
+    background-color: rgb(100, 0, 0);
+    animation: pulse 0.7s infinite;
+    transition: all 0.5s;
+}
+.stop-button:hover{
+    background-color: rgb(100, 0, 0);
+    filter: drop-shadow(0 0 5px rgb(100, 0, 0));
+    animation: stopButtonHover 0.5s;
+}
+
+@keyframes pulse {
+    0% {filter: drop-shadow(0 0 0px rgb(100, 0, 0))}
+    50% {filter: drop-shadow(0 0 5px rgb(100, 0, 0))}
+    100% {filter: drop-shadow(0 0 0px rgb(100, 0, 0))}
+}
+
+@keyframes stopButtonHover {
+    from {filter: drop-shadow(0 0 0px rgb(100, 0, 0));}
+    to {filter: drop-shadow(0 0 5px rgb(100, 0, 0));}
+}
+
+button {
+    background-color: rgb(50, 50, 50);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 14px;
+    width: 100px;
+    height: 30px;
+}
+
+button:hover {
+    background-color: rgb(60, 60, 60);
+}
+
+/* Popup Styles */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: rgb(40, 40, 40);
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.select-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.select-group label {
+    font-size: 14px;
+    color: rgb(150, 150, 150);
+}
+
+.chat-select {
+    padding: 8px;
+    border-radius: 5px;
+    background-color: rgb(50, 50, 50);
+    color: white;
+    border: none;
+}
+
+.chat-select:focus {
+    background-color: rgb(60, 60, 60);
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.textWhite {
+    color: white;
+}
+
+.textGray {
+    color: rgb(150, 150, 150);
+}
+
+.textRed {
+    color: rgb(255, 100, 100);
+}
+
+.textWeight6 {
+    font-weight: 600;
+}
+
+textarea {
+    width: 100%;
+    min-height: 100px;
+    max-height: 200px;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: rgb(50, 50, 50);
+    color: white;
+    font-size: 14px;
+    resize: vertical;
+}
+
+textarea:is(:hover, :focus) {
+    background-color: rgb(60, 60, 60);
+}
+
+.draggable {
+    -webkit-app-region: drag;
+}
+
+.rectangularButton {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+/* Common styles for both pages */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+}
+
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 100%;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.headerRowLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.headerRowRight {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contentContainer{
+    width: 90%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    align-self: center;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 5px;
+    margin: 30px;
+    background-color: rgb(40, 40, 40);
+    border-radius: 12px;
+    flex-grow: 1;
+}
+
+.interfaceContainer{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
+    bottom: 80px;
+    left: 50%;
+    padding: 20px;
+    transform: translate(-50%);
+    border-radius: 10px;
+    background-color: rgb(30, 30, 30);
+    box-shadow: 0 0 20px rgba(20, 20, 20, 0.2);
+    overflow: hidden;
+    gap: 10px;
+    transition: all 0.25s, bottom 0.5s;
+    opacity: 0.8;
+}
+.interfaceContainer:is(:hover, :focus){
+    box-shadow: 0 0 20px rgba(20, 20, 20, 0.5);
+    opacity: 1;
+}
+
+.interfaceRightButtonsWrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.interfaceButtonsContainer {
+    display: flex;
+    gap: 10px;
+}
+
+.interfaceButtonsContainer button {
+    width: 100px;
+    height: 35px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+#collapseInterfaceButton{
+    width: 100%;
+    height: 25px;
+}
+
+#lockInterfaceStateButton{
+    height: 25px;
+    width: 25px;
+}
+
+#interfaceTopRow{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    gap: 0.5rem;
+    margin-bottom: 10px;
+    padding-bottom: 20px;
+    border-bottom: solid 1px rgba(255, 255, 255, 0.2);
+}
+
+.collapsed{
+    bottom: 0%;
+    transform: translate(-50%, 70%);
+    z-index: 2;
+}
+
+.popup-content h2 {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#chatsContainer {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px;
+}
+
+.sidebar {
+    width: 300px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(30, 30, 30);
+    border-radius: 10px;
+    padding: 10px;
+    gap: 10px;
+}
+
+.search-container {
+    width: 100%;
+    padding: 10px;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    background-color: rgb(50, 50, 50);
+    color: white;
+    font-size: 14px;
+}
+
+.search-container input:focus {
+    background-color: rgb(60, 60, 60);
+}
+
+.chatCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: rgb(50, 50, 50);
+    cursor: pointer;
+    gap: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.chatCard:hover {
+    background-color: rgb(60, 60, 60);
+}
+
+.chatCard .title {
+    font-weight: 600;
+    font-size: 16px;
+    color: white;
+}
+
+.chatCard .meta {
+    font-size: 12px;
+    color: rgb(150, 150, 150);
+}
+
+.chatCard .actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.chatCard .actions button {
+    flex: 1;
+    padding: 5px;
+    font-size: 12px;
+    background-color: rgb(70, 70, 70);
+}
+.chatCard .actions button:hover {
+    background-color: rgb(80, 80, 80);
+}
+
+.chat-select option {
+    background-color: rgb(50, 50, 50);
+    color: white;
+}
+
+.popup-buttons button {
+    width: 100px;
+    height: 30px;
+}
+
+.headerRowRight button{
+    background-color: rgb(60, 60, 60);
+}
+.headerRowRight button:hover{
+    background-color: rgb(70, 70, 70);
+}
+
+.textBlue{
+    color: blue;
+}
+.textGreen{
+    color: green;
+}
+.textYellow{
+    color: yellow;
+}
+.textOrange{
+    color: orange;
+}
+.textPurple{
+    color: purple;
+}
+.textPink{
+    color: pink;
+}
+.textBlack{
+    color: black;
+}
+
+.textWeight7{
+    font-weight: 700;
+}
+.textWeight8{
+    font-weight: 800;
+}
+.textWeight9{
+    font-weight: 900;
+}
+
+button:active {
+    background-color: rgb(70, 70, 70);
+}
+
+h1 {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 2rem !important;
+}
+
+/* Add container for main content */
+main {
+    flex: 1;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}

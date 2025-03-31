@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/globalStyling.css">
+        <link rel="stylesheet" href="css/chat.css">
+        <title>Loading...</title>
+        <script type="text/javascript" src="/eel.js"></script>
+        <!-- Add markdown and syntax highlighting libraries -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/html.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/markdown.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/ini.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/toml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/git.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/diff.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/plaintext.min.js"></script>
+        <script type="text/javascript" src="js/global.js"></script>
+        <script type="text/javascript" src="js/chat.js"></script>
+        <script>
+            // Polyfill for async iterator if needed
+            if (!Symbol.asyncIterator) {
+                Symbol.asyncIterator = Symbol.for("Symbol.asyncIterator");
+            }
+        </script>
+    </head>
+    <body>
+        <div class="main-content">
+            
+            <header role="banner">
+                <div class="headerRowLeft">
+                    <button class="menu-button" onclick="toggleSidebar()">☰</button>
+                </div>
+                <div class="headerContainer draggable">
+                    <h1 id="headerTitle">Loading...</h1>
+                    <div class="headerRowRight">
+                        <button class="rectangularButton textWhite textWeight6" onclick="minimize_application()">-</button>
+                        <button class="rectangularButton textRed textWeight6" onclick="stop_application()">X</button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="sidebar" id="sidebar">
+                <div id="sidebarHeader" class="sidebar-header">
+                    <h2>Chats</h2>
+                </div>
+                <div class="sidebar-content">
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Search chats..." oninput="searchChats(this.value)">
+                    </div>
+                    <div id="chatsList" class="chats-list">
+                        <!-- Chats will be loaded here -->
+                    </div>
+                </div>
+                <div class="sidebar-footer">
+                    <button onclick="showNewChatPopup()" class="new-chat-button">New Chat</button>
+                </div>
+            </div>
+
+            <div class="contentContainer">
+                <div id="messagesContainer">
+                    <!-- Messages will be populated here -->
+                </div>
+                <div id="interfaceContainer" class="interfaceContainer">
+                    <div id="interfaceTopRow">
+                        <button id="collapseInterfaceButton">▼</button>
+                        <button id="lockInterfaceStateButton" onclick="toggleInterfaceLock()">🔓</button>
+                        <button id="stopButton" class="stop-button textWeight6" style="display: none;">⏹</button>
+                    </div>
+                    <textarea class="textWeight6" id="inputTextArea" placeholder="Type your message..."></textarea>
+                    <div class="interfaceRightButtonsWrapper">
+                        <div class="interfaceButtonsContainer">
+                            <button class="enhance-button textWeight6" onclick="enhance_prompt()">Enhance</button>
+                            <button class="textWhite textWeight6" onclick="start_generating()">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Chat Popup -->
+        <div id="newChatPopup" class="popup">
+            <div class="popup-content">
+                <h2>New Chat</h2>
+                <div class="select-group">
+                    <label>Chat Type:</label>
+                    <select id="chatTypeSelect" class="chat-select">
+                        <option value="">Select chat type...</option>
+                    </select>
+                </div>
+                <div class="select-group">
+                    <label>Model:</label>
+                    <select id="modelSelect" class="chat-select">
+                        <option value="">Select model...</option>
+                    </select>
+                </div>
+                <div class="popup-buttons">
+                    <button onclick="closeNewChatPopup()" class="textGray">Cancel</button>
+                    <button onclick="createNewChat()" class="textWhite">Create</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

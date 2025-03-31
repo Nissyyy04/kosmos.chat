@@ -1,0 +1,643 @@
+/* Main layout structure */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    width: 100%;
+    min-width: 320px;
+    transition: margin-left 0.3s ease;
+    overflow: hidden;
+    transition: all 0.25s;
+}
+
+.main-content.sidebar-open {
+    margin-left: 300px;
+    width: calc(100% - 300px);
+}
+
+/* Content container */
+.contentContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 1rem;
+    overflow: hidden;
+    width: 90%;
+    box-sizing: border-box;
+}
+
+.think-container {
+    border-left: 3px solid #6eefc0;
+    margin: 8px 0;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.4)
+}
+.think-container::before {
+    content: "Thinking Process";
+    display: block;
+    font-weight: bold;
+    color: #6eefc0;
+    margin: 8px 0;
+    font-size: 0.9em;
+}
+.think-container p{
+    color: rgba(255, 255, 255, 0.4)
+}
+
+#messagesContainer {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1vh 2vw 340px 2vw; /* Added 300px bottom padding */
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+    background-color: rgb(40, 40, 40);
+    border-radius: 12px;
+    border: solid 1px rgb(60, 60, 60);
+    width: 100%;
+    box-sizing: border-box;
+}
+.collapsed#messagesContainer {
+    bottom: auto !important;
+    transform: none !important;
+    padding: 3vh 2vw 3vh 2vw !important;
+}
+
+/* Base message styling */
+.message {
+    max-width: 85%;
+    min-width: 30%;
+    width: fit-content;
+    padding: 1vh 1vw;
+    border-radius: 12px;
+    font-size: clamp(14px, 1.2vw, 15px);
+    line-height: 1;
+    box-sizing: border-box;
+    word-break: break-word;
+}
+
+/* User messages */
+.message.user {
+    background-color: rgb(50, 50, 50);
+    color: white;
+    margin-left: auto;
+    margin-right: 1vw;
+    border-bottom-right-radius: 4px;
+}
+
+/* Assistant messages */
+.message.assistant {
+    background-color: rgb(60, 60, 60);
+    color: white;
+    margin-right: auto;
+    margin-left: 1vw;
+    border-bottom-left-radius: 4px;
+}
+
+/* System messages */
+.message.system {
+    background-color: rgb(70, 70, 70);
+    color: rgb(100, 100, 100);
+    font-style: italic;
+    margin: 0 auto;
+    text-align: center;
+    max-width: 70%;
+    width: fit-content;
+    border: dashed rgba(255, 166, 0, 0.25) 1px;
+}
+.message.system::before{
+    content: "System Prompt";
+    display: block;
+    font-weight: bold;
+    color: rgb(100, 0, 0);
+    margin: 8px 0;
+    font-size: 0.9em;
+}
+.message.system p{
+    color: rgb(100, 100, 100);
+}
+
+/* Function messages */
+.message.function {
+    background-color: rgb(80, 80, 80);
+    color: rgb(200, 200, 200);
+    font-family: monospace;
+    margin-right: auto;
+}
+
+.interfaceRightButtonsWrapper{
+    margin-left: auto;
+    width: auto;
+}
+
+#inputTextArea{
+    width: 50vw;
+    height: 12vh;
+}
+
+.enhance-button {
+    background-color: rgb(60, 60, 60);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-image: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    background-size: 400%;
+    animation: glowing 20s linear infinite;
+    position: relative;
+    backdrop-filter: blur(20px);
+    z-index: 0;
+    transition: all 0.5s ease;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+.enhance-button:hover {
+    color: black;
+    animation: glowing 60s linear infinite;
+    background-clip: unset;
+    -webkit-background-clip: unset;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes glowing {
+    0% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 400% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
+
+.popup-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    animation: fadeInOut 5s ease-in-out forwards;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    10% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+    90% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+}
+
+.sidebar {
+    position: fixed;
+    left: -300px;
+    top: 0;
+    width: 300px;
+    height: 100vh;
+    background-color: rgb(30, 30, 30);
+    transition: left 0.3s ease;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgb(50, 50, 50);
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    color: white;
+}
+
+.close-sidebar {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0 10px;
+    padding-bottom: 5px;
+    width: auto;
+    height: auto;
+}
+
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid rgb(50, 50, 50);
+}
+
+.chats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.chat-card {
+    padding: 15px;
+    background-color: rgb(50, 50, 50);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+}
+
+.new-chat-button {
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.new-chat-button:hover {
+    background-color: rgb(70, 70, 70);
+}
+
+.sidebar-chat {
+    padding: 15px;
+    background-color: rgb(40, 40, 40);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 5px;
+}
+
+.sidebar-chat:hover {
+    background-color: rgb(50, 50, 50);
+}
+
+.sidebar-chat.active {
+    background-color: rgb(60, 60, 60);
+}
+.sidebar-chat.active:hover{
+    background-color: rgb(50, 50, 50);
+}
+
+.sidebar-chat-title {
+    color: white;
+    font-size: 14px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-chat-meta {
+    color: rgb(150, 150, 150);
+    font-size: 12px;
+}
+
+.sidebar-empty-state {
+    text-align: center;
+    padding: 20px;
+    color: rgb(150, 150, 150);
+}
+
+.sidebar-empty-state p {
+    margin-bottom: 15px;
+}
+
+.sidebar-empty-state .new-chat-button {
+    background-color: rgb(60, 60, 60);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sidebar-empty-state .new-chat-button:hover {
+    background-color: rgb(70, 70, 70);
+}
+
+
+/* Horizontal Rule styling */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1); /* Default dark gray */
+    margin: 1.5rem 0;
+}
+
+/* For a colored accent version */
+hr.accent {
+    background-color: #4a90e2; /* Matching your think-container blue */
+    height: 2px;
+}
+
+/* For a gradient effect matching your enhance button */
+hr.gradient {
+    height: 2px;
+    background-image: linear-gradient(45deg, 
+        #ff0000, #ff7300, #fffb00, #48ff00, 
+        #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    background-size: 400%;
+    animation: glowing 20s linear infinite;
+    border: 0;
+}
+
+.message-header{
+    display: flex;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    font-weight: bold;
+    border-bottom: solid 1px rgba(255, 255, 255, 0.4);
+    background-color: rgba(255, 255, 255, 0.1);
+    flex-direction: row;
+}
+.message-name{
+    color: #7a00ff;
+    font-weight: bold;
+}
+.message-role{
+    margin-left: auto;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: normal;
+}
+.message.assistant .message-name{
+    color: #00bbff;
+}
+
+/* Message content */
+.message-content {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: rgb(200, 200, 200);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    padding: 0;
+    font-size: inherit;
+    max-height: none;
+}
+
+.message-content h1,
+.message-content h2,
+.message-content h3,
+.message-content h4,
+.message-content h5,
+.message-content h6 {
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.message-content h1 { font-size: 1.5em; }
+.message-content h2 { font-size: 1.3em; }
+.message-content h3 { font-size: 1.2em; }
+
+/* Lists */
+.message-content ul,
+.message-content ol {
+    margin: 0.5em 0;
+    padding-left: 2em;
+}
+
+.message-content li {
+    margin: 0.25em 0;
+}
+
+/* Inline Code & Preformatted Blocks */
+.message-content code {
+    background-color: #3a3a3a;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+}
+
+.message-content pre {
+    background-color: #2d2d2d;
+    padding: 1em;
+    border-radius: 5px;
+    overflow: auto;
+    margin: 0.5em 0;
+    max-height: 50vh;
+    font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+}
+
+.message-content pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+}
+
+.message-content,
+.message-content pre,
+.message-content code {
+    user-select: text;
+}
+
+/* Blockquotes */
+.message-content blockquote {
+    border-left: 4px solid rgba(255, 255, 255, 0.2);
+    margin: 0.5em 0;
+    padding-left: 1em;
+    color: rgba(224, 224, 224, 0.8);
+    font-style: italic;
+}
+
+/* Tables */
+.message-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1.5em; /* Add bottom margin for better readability */
+}
+
+.message-content th,
+.message-content td {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75em;
+    text-align: left;
+    min-width: 100px; /* Prevent columns from being too narrow */
+}
+
+.message-content th {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Links */
+.message-content a {
+    color: #4ea1d3;
+    text-decoration: none;
+}
+
+.message-content a:hover {
+    text-decoration: underline;
+}
+/* Marked.js Syntax Highlighting - Clean & Polished Theme */
+
+.hljs {
+    background-color: #2f2f2f; /* Flat dark gray background */
+    border-radius: 4px;
+    padding: 1em;
+    overflow-x: auto;
+    cursor: text;
+    line-height: 1rem !important;
+    color: #cccccc !important; /* Default text color */
+}
+
+/* Text selection styling */
+::selection {
+    background: #4e4e4e;
+    color: #ffffff;
+}
+
+.hljs ::selection {
+    background: #4e4e4e;
+    color: #ffffff;
+}
+
+/* Comments - subtle and italic */
+.hljs-comment {
+    color: #7a7a7a !important;
+    font-style: italic;
+}
+
+/* Keywords, titles, and strong emphasis - a soft pink for a playful accent */
+.hljs-keyword,
+.hljs-selector-class,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-name,
+.hljs-strong {
+    color: #ef6eb1 !important; 
+}
+
+/* Strings, attributes, and template tags - a soft minty green */
+.hljs-string,
+.hljs-attr,
+.hljs-template-tag {
+    color: #6eefc0 !important;
+}
+
+/* Numbers, literals, variables, and template variables - a warm orange */
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable {
+    color: #ffae57 !important;
+}
+
+/* Function names - a bright, cheerful yellow */
+.hljs-function {
+    color: #ffd75f !important;
+}
+
+/* Built-in elements - matching the warm orange for consistency */
+.hljs-built_in {
+    color: #ffae57 !important;
+}
+
+p{
+    line-height: 1.2rem !important;
+}
+
+@media (max-width: 768px) {
+    .main-content.sidebar-open {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .contentContainer {
+        padding: 0.5vh 1vw;
+        gap: 0.5vh;
+    }
+    
+    #messagesContainer {
+        padding: 0.5vh 1vw;
+        gap: 0.5vh;
+    }
+    
+    .message {
+        max-width: 90%;
+        padding: 0.8vh 2vw;
+        font-size: clamp(13px, 3.5vw, 15px);
+        margin-bottom: 0.3vh;
+    }
+    
+    .message.system {
+        max-width: 85%;
+    }
+
+    #inputTextArea{
+        width: 50vw;
+        height: 8vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .message {
+        max-width: 95%;
+        min-width: 50%;
+        padding: 0.5vh 2vw;
+        font-size: clamp(12px, 3.2vw, 14px);
+    }
+    
+    .contentContainer {
+        padding: 0.5vh 0;
+    }
+    
+    #messagesContainer {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    #inputTextArea{
+        width: 50vw;
+        height: 8vh;
+    }
+}

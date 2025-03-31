@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/globalStyling.css">
+        <link rel="stylesheet" href="css/index.css">
+        <title>Loading...</title>
+        <script type="text/javascript" src="/eel.js"></script>
+        <script type="text/javascript" src="js/global.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </head>
+    <body>
+        <header role="banner">
+            <div class="headerContainer draggable">
+            <div class="headerRowLeft">
+                <h1 id="headerTitle">Loading...</h1>
+            </div>
+            <div class="headerRowRight">
+                <button class="rectangularButton textWhite textWeight6" aria-label="Minimize" onclick="minimize_application()">-</button>
+                <button class="rectangularButton textRed textWeight6" aria-label="Close" onclick="stop_application()">X</button>
+            </div>
+            </div>
+        </header>
+          
+        <div class="contentContainer">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search chats..." oninput="search_chats()">
+            </div>
+            <div id="chatsContainer">
+                <!-- Chats are populated here by the backend -->
+            </div>
+            <div class="main-content">
+                <div class="interfaceContainer">
+                    <button onclick="showNewChatPopup()">New Chat</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Chat Popup -->
+        <div id="newChatPopup" class="popup">
+            <div class="popup-content">
+                <h2>New Chat</h2>
+                <div class="select-group">
+                    <label>Chat Type:</label>
+                    <select id="chatTypeSelect" class="chat-select">
+                        <option value="">Select chat type...</option>
+                    </select>
+                </div>
+                <div class="select-group">
+                    <label>Model:</label>
+                    <select id="modelSelect" class="chat-select">
+                        <option value="">Select model...</option>
+                    </select>
+                </div>
+                <div class="popup-buttons">
+                    <button onclick="closeNewChatPopup()" class="textGray">Cancel</button>
+                    <button onclick="createNewChat()" class="textWhite">Create</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
