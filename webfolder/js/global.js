@@ -4,7 +4,7 @@ const header = document.querySelector("header");
 let popupTimeout;
 let activePopups = [];
 
-let assistantMessageElement = null;
+let assistantMessageElement = null;  // Global assistant message element
 
 let isInterfaceOpen = true;
 let isInterfaceLocked = false;
@@ -120,7 +120,6 @@ function toggleInterfaceLock(){
     }
 }
 
-
 document.addEventListener('DOMContentLoaded', function() {
     let dragging = false;
     let startX, startY;
@@ -153,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
         collapseInterfaceButton.onclick = toggleInterface;
     }
 
-    const inputTextArea = document.getElementById("inputTextArea")
+    const inputTextArea = document.getElementById("inputTextArea");
     
     if (inputTextArea){
         inputTextArea.addEventListener('input', function(){
@@ -163,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    const messagesContainer = document.getElementById("messagesContainer")
+    const messagesContainer = document.getElementById("messagesContainer");
 
     // Set the title - moved from window.onload to avoid conflicts
     eel.get_app_title()(function(title) {
@@ -200,9 +199,8 @@ document.addEventListener('click', function(event) {
         return;
     }
 
-    // Otherwise, do nothing (i.e. don't toggle the interface open if already closed).
+    // Otherwise, do nothing.
 });
-
 
 document.addEventListener('keydown', function(event) {
     // Handle collapse/expand with Shift+Arrow keys
@@ -217,7 +215,6 @@ document.addEventListener('keydown', function(event) {
     }
 
     // Only proceed if an ASCII printable character is pressed.
-    // ASCII printable characters have a char code between 32 and 126.
     if (!(event.key.length === 1 && event.key.charCodeAt(0) >= 32 && event.key.charCodeAt(0) <= 126)) {
         return;
     }
@@ -227,7 +224,6 @@ document.addEventListener('keydown', function(event) {
         return;
     }
     
-
     // If the interface is closed, open it.
     if (!isInterfaceOpen){
         openInterface();
@@ -236,7 +232,6 @@ document.addEventListener('keydown', function(event) {
     // Focus the inputTextArea
     inputTextArea.focus();
 });
-
 
 eel.expose(receive_chunk);
 function receive_chunk(chunk) {

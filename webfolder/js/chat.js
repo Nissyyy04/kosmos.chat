@@ -1,9 +1,8 @@
 let currentChatId = null;
 let isSidebarOpen = false;
-
 let isGenerating = false;
 
-let currentAssistantMessage = null;
+// Remove local assistantMessageElement – we'll use the global one defined in global.js
 
 // Helper: Extract chat ID from URL
 function getChatIdFromUrl() {
@@ -155,7 +154,6 @@ function createMessageElement(message) {
     return div;
 }
 
-
 function addMessageToUI(message) {
     const container = document.getElementById('messagesContainer');
     const messageElement = createMessageElement(message);
@@ -195,9 +193,11 @@ async function start_generating() {
         const username = await eel.username()();
         addMessageToUI({ role: 'user', content: input, name: username });
         
-        const currentModelName = await eel.current_model_name()();
-        const assistantMessageElement = createMessageElement({ role: 'assistant', content: '', name: currentModelName });
-        document.getElementById('messagesContainer').appendChild(assistantMessageElement);
+        // Use the global assistantMessageElement (do not declare locally)
+        eel.current_model_name()(function(currentModelName) {
+            assistantMessageElement = createMessageElement({ role: 'assistant', content: '', name: currentModelName });
+            document.getElementById('messagesContainer').appendChild(assistantMessageElement);
+        });
         
         // Start generation without saving to history immediately
         await eel.start_generating(input)();
@@ -209,7 +209,6 @@ async function start_generating() {
     }
     updateChatTitle(currentChatId);
 }
-
 
 // Add stop handler
 function stop_generating() {
@@ -390,14 +389,14 @@ window.onload = function() {
 
     // Reset sidebar state
     const sidebar = document.getElementById('sidebar');
-    const sidebarHeader = document.getElementById('sidebarHeader')
+    const sidebarHeader = document.getElementById('sidebarHeader');
     const mainContent = document.querySelector('.main-content');
     isSidebarOpen = false;
     if (sidebar) sidebar.classList.remove('open');
     if (mainContent) mainContent.classList.remove('sidebar-open');
     if (sidebarHeader) sidebarHeader.onclick = function(){
         setSidebarState(false);
-    }
+    };
 
     // Extract current chat ID from URL
     currentChatId = getChatIdFromUrl();
