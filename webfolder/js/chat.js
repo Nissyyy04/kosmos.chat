@@ -105,25 +105,25 @@ function createMessageElement(message) {
     const div = document.createElement('div');
     div.className = `message ${message.role}`;
 
-    if (message.role.toLowerCase().trim() === "system") return;
-
-    // Create header container
-    const header = document.createElement('div');
-    header.className = 'message-header';
-
-    if (message.name) {
-        const nameElem = document.createElement('div');
-        nameElem.className = 'message-name';
-        nameElem.textContent = message.name;
-        header.appendChild(nameElem);
+    if (message.role.toLowerCase().trim() !== "system"){
+        // Create header container
+        const header = document.createElement('div');
+        header.className = 'message-header';
+        
+        if (message.name) {
+            const nameElem = document.createElement('div');
+            nameElem.className = 'message-name';
+            nameElem.textContent = message.name;
+            header.appendChild(nameElem);
+        }
+        if (message.role) {
+            const roleElem = document.createElement('div');
+            roleElem.className = 'message-role';
+            roleElem.textContent = message.role;
+            header.appendChild(roleElem);
+        }
+        div.appendChild(header);
     }
-    if (message.role) {
-        const roleElem = document.createElement('div');
-        roleElem.className = 'message-role';
-        roleElem.textContent = message.role;
-        header.appendChild(roleElem);
-    }
-    div.appendChild(header);
 
     // Create the main content container
     const content = document.createElement('div');
@@ -237,12 +237,15 @@ function enhance_prompt() {
     const input = document.getElementById('inputTextArea').value.trim();
     if (!input) return;
     showPopupMessage('Enhancing prompt...');
+    inputTextArea.classList.add("rainbowBorder")
     eel.enhance_prompt(input)(function(response) {
         if (response.error) {
             showPopupMessage(`Error: ${response.error}`);
         } else {
-            document.getElementById('inputTextArea').value = response;
+            const inputTextArea = document.getElementById('inputTextArea');
+            inputTextArea.value = response;
             showPopupMessage('Prompt enhanced!');
+            inputTextArea.classList.remove("rainbowBorder")
         }
     });
 }
@@ -357,6 +360,8 @@ function createNewChat() {
     });
 }
 
+
+
 function searchChats(query) {
     if (!query.trim()) {
         loadSidebarChats();
@@ -409,18 +414,22 @@ window.onload = function() {
 
     // Update header title using the chat details
     if (currentChatId) {
-        eel.get_chat(currentChatId)(function(chat) {
-            if (chat && chat.title) {
-                const headerTitle = document.getElementById('headerTitle');
-                if (headerTitle) {
-                    headerTitle.textContent = chat.title;
-                    // Add click handler for home navigation
-                    headerTitle.addEventListener('click', function() {
-                        window.location.href = 'index.html';
-                    });
+        (async function updateHeaderTitle() {
+            try {
+                const chat = await eel.get_chat(currentChatId)();
+                if (chat && chat.title) {
+                    const headerTitle = document.getElementById('headerTitle');
+                    if (headerTitle) {
+                        headerTitle.textContent = chat.title;
+                        headerTitle.addEventListener('click', () => {
+                            window.location.href = 'index.html';
+                        });
+                    }
                 }
+            } catch (err) {
+                console.error("Error getting chat:", err);
             }
-        });
+        })();
     } else {
         // No chat ID in URL, use default title
         const headerTitle = document.getElementById('headerTitle');
@@ -431,6 +440,7 @@ window.onload = function() {
             });
         }
     }
+
 
     if (currentChatId) {
         console.log("Loading messages for chat:", currentChatId);

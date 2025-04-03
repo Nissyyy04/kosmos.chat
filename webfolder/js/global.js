@@ -84,7 +84,7 @@ function openInterface(){
     if (messagesContainer) {
         setTimeout(function() {
             messagesContainer.scrollBy({ top: 340, behavior: 'smooth' });
-        }, 250);
+        }, 0);
         messagesContainer.classList.remove("collapsed");
     }
     interfaceContainer.classList.remove("collapsed");
@@ -132,7 +132,8 @@ document.addEventListener('DOMContentLoaded', function() {
             startY = e.screenY;
         });
     
-        document.addEventListener("mousemove", (e) => {
+        document.querySelector("header").addEventListener("mousemove", (e) => {
+            requestAnimationFrame(() => {
             if (dragging) {
                 const dx = e.screenX - startX;
                 const dy = e.screenY - startY;
@@ -140,7 +141,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 startY = e.screenY;
                 eel.drag_window(dx, dy);
             }
+            });
         });
+          
     
         document.addEventListener("mouseup", () => {
             dragging = false;
@@ -204,6 +207,7 @@ document.addEventListener('click', function(event) {
 
 document.addEventListener('keydown', function(event) {
     // Handle collapse/expand with Shift+Arrow keys
+    if (event.ctrlKey && (event.key === "c" || event.key === "v")) return;
     if (event.key === "ArrowDown" && event.shiftKey) {
         collapseInterface();
     }

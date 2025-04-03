@@ -117,7 +117,7 @@ class funcs:
             
             prompt = (
                 "Enhance the following prompt to improve its clarity, creativity, and effectiveness. "
-                "Return only the final, enhanced prompt with no additional commentary or chain-of-thought."
+                "Return only the final, enhanced prompt with no additional commentary"
             )
 
             response = model.plainGen(prompt).response
@@ -157,14 +157,31 @@ class funcs:
             logging.error(f"Error generating title: {str(e)}")
             return {"error": str(e)}
 
+    async def stream_response(prompt: str):
+        try:
+            if not model.current_chat:
+                raise Exception("No active chat")
+            # Add the user prompt to the chat history
+            model.add_message(MessageRole.USER, prompt, os.getenv("username"))
+            full_response = ""
+            # Use model.generate_async instead of the undefined model_instance
+            async for chunk in model.generate_async(prompt, stream=True, add_to_history=False):
+                full_response += chunk
+                eel.receive_chunk(chunk)
+            model.add_message(MessageRole.ASSISTANT, full_response, model.current_chat.model_name)
+            _save_chats()
+            eel.generation_complete()
+        except Exception as e:
+            eel.receive_chunk(f"<ERROR>{str(e)}</ERROR>")
+            logging.error(f"Generation error: {str(e)}")
+
     def start_generating(prompt: str):
         try:
             if not model.current_chat:
                 raise Exception("No active chat")
             
             model.add_message(MessageRole.USER, prompt, os.getenv("username"))
-
-            # Get the generator - ADD add_to_history=False HERE
+            # Get the generator (streaming generator with add_to_history=False)
             generator = model.generate(prompt, stream=True, add_to_history=False)
             full_response = ""
             
@@ -173,7 +190,7 @@ class funcs:
                 full_response += chunk
                 eel.receive_chunk(chunk)
 
-            # Add FINAL message ONCE
+            # Add final assistant message
             model.add_message(MessageRole.ASSISTANT, full_response, model.current_chat.model_name)
             _save_chats()
             eel.generation_complete()

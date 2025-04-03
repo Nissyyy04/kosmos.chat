@@ -60,10 +60,12 @@
     border: solid 1px rgb(60, 60, 60);
     width: 100%;
     box-sizing: border-box;
+    transition: padding-bottom 0s !important;
 }
 .collapsed#messagesContainer {
     bottom: auto !important;
     transform: none !important;
+    transition: padding-bottom 0.25s !important;
     padding: 3vh 2vw 3vh 2vw !important;
 }
 
@@ -129,6 +131,7 @@
     margin-right: auto;
 }
 
+
 .interfaceRightButtonsWrapper{
     margin-left: auto;
     width: auto;
@@ -163,6 +166,27 @@
     -webkit-background-clip: unset;
     box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
 }
+
+.rainbowBorder {
+    border-width: 1px;
+    border-style: solid;
+    animation: rainbowBorder 10s infinite;
+}
+
+@keyframes rainbowBorder {
+    0% { border-color: #ff0000; }
+    10% { border-color: #ff7300; }
+    20% { border-color: #fffb00; }
+    30% { border-color: #48ff00; }
+    40% { border-color: #48ff00; }
+    50% { border-color: #00ffd5; }
+    60% { border-color: #002bff; }
+    70% { border-color: #7a00ff; }
+    80% { border-color: #ff00c8; }
+    90% { border-color: #ff0062; }
+    100% { border-color: #ff0000; }
+}
+
 
 @keyframes glowing {
     0% {
@@ -586,6 +610,10 @@ p{
 }
 
 @media (max-width: 768px) {
+    *{
+        line-height: 1.2rem !important;
+    }
+
     .main-content.sidebar-open {
         margin-left: 0;
         width: 100%;
@@ -597,8 +625,16 @@ p{
     }
     
     #messagesContainer {
-        padding: 0.5vh 1vw;
+        padding: 1vh 2vw 340px 2vw;
         gap: 0.5vh;
+    }
+
+    .interfaceContainer{
+        width: 80% !important;
+    }
+
+    #inputTextArea{
+        width: 100% !important; 
     }
     
     .message {

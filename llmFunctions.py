@@ -8,6 +8,9 @@ import ollama
 import traceback
 from dataclasses import dataclass, field
 import uuid, logging
+import asyncio, threading
+from typing import AsyncGenerator
+import os
 
 class MessageRole(Enum):
     SYSTEM = "system"
@@ -54,7 +57,33 @@ class Model:
     def get_available_models(self) -> List[Dict[str, str]]:
         return self.available_models
 
+    async def generate_async(self, prompt: str, stream: bool = True, add_to_history: bool = True) -> AsyncGenerator[str, None]:
+        """
+        Asynchronously generate response chunks by running the blocking generate() method in a background thread.
+        Yields each chunk as it becomes available.
+        """
+        loop = asyncio.get_running_loop()
+        queue: asyncio.Queue = asyncio.Queue()
 
+        def run_blocking_generation():
+            try:
+                # Iterate over the blocking generator and put chunks into the queue.
+                for chunk in self.generate(prompt, stream, add_to_history):
+                    loop.call_soon_threadsafe(queue.put_nowait, chunk)
+            except Exception as e:
+                loop.call_soon_threadsafe(queue.put_nowait, f"<ERROR>{str(e)}</ERROR>")
+            # Signal completion.
+            loop.call_soon_threadsafe(queue.put_nowait, None)
+
+        # Start the blocking generation in a background thread.
+        threading.Thread(target=run_blocking_generation, daemon=True).start()
+
+        # Yield chunks as they arrive.
+        while True:
+            chunk = await queue.get()
+            if chunk is None:
+                break
+            yield chunk
 
     def generate_title(self, conversation_history: list, previous_title: str = None) -> str:
         """
@@ -123,12 +152,13 @@ Format: Always output the title in this exact format:
         return chat
 
     def _get_system_prompt(self, chat_type: str) -> str:
-        system_prompts = {
-            "general": "You are a helpful AI assistant.",
-            "code": "You are an expert programming assistant. Provide clear, well-documented code and explanations.",
-            "creative": "You are a creative writing assistant. Help with storytelling, poetry, and creative content.",
-            "analysis": "You are a data analysis assistant. Help with data interpretation and analysis."
-        }
+        system_prompts = {}
+        print(f'....{os.getcwd()}....')
+        for file in os.listdir('prompts'):
+            if file.startswith('system.') and file.endswith('.txt'):
+                systemPromptKey = file.replace('system.', '').replace('.txt', '')
+                systemPromptContent = open(os.path.join('prompts', file), 'rb').read().decode()
+                system_prompts.update({systemPromptKey: systemPromptContent})
         return system_prompts.get(chat_type, system_prompts["general"])
 
     def add_message(self, role: MessageRole, content: str, name: Optional[str] = None):
